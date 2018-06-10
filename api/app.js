@@ -4,7 +4,7 @@ const config = require('./config');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const studentRoutes = require('./api/routes/students');
+const studentRoutes = require('./routes/students');
 
 mongoose.connect(config.db.url);
 
