@@ -23,8 +23,22 @@ const studentSchema = new Schema({
     },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    birthPlace: { type: String, required: true },
-    livingPlace: { type: String, required: true },
+    birthPlace: {
+        type: String,
+        required: true,
+        validate: {
+            validator: (v) => /^[A-ZČĆŽŠĐ]([a-zčćžšđ])+([ ][A-ZČĆŽŠĐ][a-zčćžšđ]+)*$/.test(v),
+            message: 'BirthPlace is not valid!'
+        }
+    },
+    livingPlace: {
+        type: String,
+        required: true,
+        validate: {
+            validator: (v) => /^[A-ZČĆŽŠĐ]([a-zčćžšđ])+([ ][A-ZČĆŽŠĐ][a-zčćžšđ]+)*$/.test(v),
+            message: 'LivingPlace is not valid!'
+        }
+    },
     adress: { type: String, required: true },
     espb: {
         type: Number,
@@ -40,7 +54,7 @@ const studentSchema = new Schema({
         type: String,
         required: true,
         validate: {
-            validator: (v) => /^\(?([0-9]{3})\)?[/.]([0-9]{6,7})$/.test(v),
+            validator: (v) => /^[0-9]{3}[/][0-9]{6,7}$/.test(v),
             message: 'Phone number must be in format 999/999999(9)!'
         }
     },
