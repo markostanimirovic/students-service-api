@@ -21,5 +21,4 @@ app.use('/students', studentRoutes);
 app.use('/places', placeRoutes);
 
 app.use('/*', notFoundController);
-
 module.exports = app;

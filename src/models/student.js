@@ -67,20 +67,21 @@ const studentSchema = new Schema({
         }
     },
     studyField: { type: String, required: true },
-    // thesis: {
-    //     type: {
-    //         name: { type: String, required: true },
-    //         date: { type: Date, required: true },
-    //         mark: {
-    //             type: Number,
-    //             validate: {
-    //                 validator: Number.isInteger,
-    //                 message: 'Mark must be an integer value!'
-    //             }
-    //         }
-    //     }
-    // },
     state: { type: Number, default: 0 }
 });
+
+// thesis: {
+//     type: {
+//         name: { type: String, required: true },
+//         date: { type: Date, required: true },
+//         mark: {
+//             type: Number,
+//             validate: {
+//                 validator: Number.isInteger,
+//                 message: 'Mark must be an integer value!'
+//             }
+//         }
+//     }
+// },
 
 module.exports = mongoose.model('Student', studentSchema, 'students');

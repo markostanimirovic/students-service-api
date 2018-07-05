@@ -2,93 +2,138 @@ const mongoose = require('mongoose');
 
 const Student = require('../models/student');
 
-module.exports.getAll = (req, res, next) => {
+module.exports.getAll = (req, res) => {
     Student.find().exec()
-        .then(docs =>
+        .then(docs => {
             res.status(200).json({
                 type: 'success',
                 count: docs.length,
                 students: docs
-            }))
-        .catch(err => next(err));
+            });
+        }).catch(err => {
+            res.status(500).json({
+                type: 'error',
+                message: 'Internal Server Error'
+            });
+        });
 };
 
-module.exports.getById = (req, res, next) => {
+module.exports.getById = (req, res) => {
     Student.findById(req.params.id).exec()
-        .then(doc => doc ? res.status(200).json(doc) : next())
-        .catch(err => next(err));
+        .then(doc => {
+            if (doc) {
+                res.status(200).json({
+                    type: 'success',
+                    student: doc
+                });
+            } else {
+                res.status(400).json({
+                    type: 'error',
+                    message: 'Bad Request. Student Not Found'
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                type: 'error',
+                message: err.message
+            })
+        });
 };
 
-module.exports.post = (req, res, next) => {
-    fillStudentForInsert(req)
+module.exports.post = (req, res) => {
+    fillStudentForInsert(req.body)
         .save()
-        .then(result =>
+        .then(result => {
             res.status(200).json({
                 type: 'success',
                 message: 'Inserted student successfully'
-            }))
-        .catch(err => {
-            err.name === 'ValidationError' ? err.status = 400 : null;
-            next(err);
+            });
+        }).catch(err => {
+            res.status(400).json({
+                type: 'error',
+                message: err.message
+            });
         });
 };
 
-module.exports.put = (req, res, next) => {
-    Student.findByIdAndUpdate(req.params.id, fillStudentForUpdate(req), { runValidators: true }).exec()
-        .then(result =>
-            result ? res.status(200).json({
-                type: 'success',
-                message: 'Updated student successfully'
-            }) : next())
-        .catch(err => {
-            err.name === 'ValidationError' ? err.status = 400 : null;
-            next(err);
+module.exports.put = (req, res) => {
+    Student.findByIdAndUpdate(req.params.id,
+        fillStudentForUpdate(req.body), { runValidators: true }).exec()
+        .then(result => {
+            if (result) {
+                res.status(200).json({
+                    type: 'success',
+                    message: 'Updated student successfully'
+                });
+            } else {
+                res.status(400).json({
+                    type: 'error',
+                    message: 'Bad Request. Student Not Found'
+                });
+            }
+        }).catch(err => {
+            res.status(400).json({
+                type: 'error',
+                message: err.message
+            });
         });
 };
 
-module.exports.patch = (req, res, next) => {
+module.exports.patch = (req, res) => {
     res.status(200).json({ message: 'TODO: Implement!' });
 };
 
-module.exports.delete = (req, res, next) => {
+module.exports.delete = (req, res) => {
     Student.findByIdAndRemove(req.params.id).exec()
-        .then(result =>
-            result ? res.status(200).json({
-                type: 'success',
-                message: 'Deleted student successfully'
-            }) : next())
-        .catch(err => next(err));
+        .then(result => {
+            if (result) {
+                res.status(200).json({
+                    type: 'success',
+                    message: 'Deleted student successfully'
+                });
+            } else {
+                res.status(400).json({
+                    type: 'error',
+                    message: 'Bad Request. Student Not Found'
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                type: 'error',
+                message: err.message
+            });
+        });
 };
 
-const fillStudentForInsert = (req) => {
+const fillStudentForInsert = (student) => {
     return new Student({
         _id: new mongoose.Types.ObjectId(),
-        number: req.body.number,
-        year: req.body.year,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        birthPlace: req.body.birthPlace,
-        livingPlace: req.body.livingPlace,
-        adress: req.body.adress,
-        espb: req.body.espb,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        studyField: req.body.studyField
+        number: student.number,
+        year: student.year,
+        firstName: student.firstName,
+        lastName: student.lastName,
+        birthPlace: student.birthPlace,
+        livingPlace: student.livingPlace,
+        adress: student.adress,
+        espb: student.espb,
+        phoneNumber: student.phoneNumber,
+        email: student.email,
+        studyField: student.studyField
     });
 }
 
-const fillStudentForUpdate = (req) => {
+const fillStudentForUpdate = (student) => {
     return new Student({
-        number: req.body.number,
-        year: req.body.year,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        birthPlace: req.body.birthPlace,
-        livingPlace: req.body.livingPlace,
-        adress: req.body.adress,
-        espb: req.body.espb,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        studyField: req.body.studyField,
+        number: student.number,
+        year: student.year,
+        firstName: student.firstName,
+        lastName: student.lastName,
+        birthPlace: student.birthPlace,
+        livingPlace: student.livingPlace,
+        adress: student.adress,
+        espb: student.espb,
+        phoneNumber: student.phoneNumber,
+        email: student.email,
+        studyField: student.studyField,
     });
 };

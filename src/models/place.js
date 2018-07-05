@@ -7,7 +7,8 @@ const placeSchema = new Schema({
         type: String,
         required: true,
         validate: {
-            validator: (v) => /^[A-ZČĆŽŠĐ]([a-zčćžšđ])+([ ][A-ZČĆŽŠĐ][a-zčćžšđ]+)*$/.test(v),
+            validator: (v) =>
+                /^[A-ZČĆŽŠĐ]([a-zčćžšđ])+([ ][A-ZČĆŽŠĐ][a-zčćžšđ]+)*$/.test(v),
             message: 'Place name is not valid!'
         }
     }
