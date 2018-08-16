@@ -35,32 +35,6 @@ module.exports.post = (req, res) => {
             }));
 };
 
-// module.exports.post = (req, res) => {
-//     Place.find().exec()
-//         .then(docs => docs.map((place) => place.name))
-//         .then(placesFromDb =>
-//             req.body.reduce((placesForInsert, placeName) => {
-//                 if (placesFromDb.indexOf(placeName) < 0
-//                     && placesForInsert.filter(element =>
-//                         element.name === placeName).length === 0) {
-//                     placesForInsert.push(fillPlaceForInsert(placeName));
-//                 }
-//                 return placesForInsert;
-//             }, []))
-//         .then(placesForInsert =>
-//             Place.insertMany(placesForInsert))
-//         .then(insertedPlaces =>
-//             res.status(200).json({
-//                 type: 'success',
-//                 result: insertedPlaces
-//             }))
-//         .catch(err =>
-//             res.status(400).json({
-//                 type: 'error',
-//                 error: err.message
-//             }));
-// };
-
 const getPlacesForInsert = (places) => {
     return Place.find().exec()
         .then(docs => docs.map((place) => place.name))
