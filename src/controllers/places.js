@@ -22,13 +22,13 @@ module.exports.getAll = (req, res) => {
 module.exports.post = (req, res) => {
     getPlacesForInsert(req.body)
         .then(placesForInsert =>
-            Place.insertMany(placesForInsert)
-        ).then(insertedPlaces =>
+            Place.insertMany(placesForInsert))
+        .then(insertedPlaces =>
             res.status(200).json({
                 type: 'success',
                 result: insertedPlaces
-            })
-        ).catch(err =>
+            }))
+        .catch(err =>
             res.status(400).json({
                 type: 'error',
                 error: err.message

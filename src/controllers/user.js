@@ -22,21 +22,15 @@ module.exports.login = (req, res) => {
     User.findOne({ email: req.body.email }).exec()
         .then(user => {
             if (!user) {
-                return res.status(401).json({
-                    type: 'error',
-                    message: 'Auth failed!'
-                });
+                throw new Error();
             }
             fetchedUser = user;
             return bcrypt.compare(req.body.password, user.password)
         }).then(result => {
             if (!result) {
-                return res.status(401).json({
-                    type: 'error',
-                    message: 'Auth failed!'
-                });
+                throw new Error();
             }
-            const token = jwt.sign({ email: fetchedUser.email, userId: fetchedUser._id }, config.secret, { expiresIn: '1h' });
+            const token = jwt.sign({ email: fetchedUser.email, userId: fetchedUser._id }, config.secret);
             res.status(200).json({
                 type: 'success',
                 token: token
